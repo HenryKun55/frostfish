@@ -6,6 +6,7 @@ grow your frozen-fish empire. Built from scratch with plain **HTML + Canvas + JS
 no dependencies.
 
 **▶️ Play: https://henrykun55.github.io/frostfish/**
+**🗺️ Roadmap: https://henrykun55.github.io/frostfish/roadmap.html**
 
 ## The loop
 

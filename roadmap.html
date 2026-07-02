@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FrostFish — Roadmap</title>
+  <meta name="theme-color" content="#081521" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎣</text></svg>" />
+</head>
+<body>
+<style>
+  :root {
+    --ground: #081521;
+    --ground-2: #0b1c2b;
+    --panel: #10273a;
+    --panel-2: #143047;
+    --line: #204863;
+    --ink: #e6f3fb;
+    --muted: #86a6bc;      /* blue-biased neutral, chosen not defaulted */
+    --frost: #7ec2f2;
+    --frost-bright: #b6e6ff;
+    --gold: #ffcf5a;       /* reward / money */
+    --salmon: #f2916f;     /* the salmon steak */
+    --good: #7fd6a0;
+    --font-display: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --font-body: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --font-mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, monospace;
+  }
+
+  * { box-sizing: border-box; }
+
+  #snow {
+    position: fixed; inset: 0; width: 100%; height: 100%;
+    z-index: 0; pointer-events: none;
+  }
+
+  .page {
+    position: relative;
+    z-index: 1;
+    min-height: 100%;
+    background:
+      radial-gradient(1200px 600px at 78% -10%, rgba(126,194,242,0.10), transparent 60%),
+      radial-gradient(900px 500px at 0% 8%, rgba(47,111,176,0.16), transparent 55%),
+      linear-gradient(180deg, var(--ground-2), var(--ground) 55%);
+    color: var(--ink);
+    font-family: var(--font-body);
+    line-height: 1.6;
+    padding: clamp(20px, 5vw, 56px) 20px 72px;
+  }
+
+  .wrap { max-width: 900px; margin: 0 auto; }
+
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--frost);
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .eyebrow::before {
+    content: "";
+    width: 26px; height: 2px; background: var(--frost); display: inline-block;
+  }
+
+  h1 {
+    font-family: var(--font-display);
+    font-weight: 850;
+    font-size: clamp(34px, 7vw, 62px);
+    line-height: 1.02;
+    letter-spacing: -0.025em;
+    text-wrap: balance;
+    margin: 18px 0 14px;
+  }
+  h1 .drift { color: var(--frost-bright); }
+
+  .lede {
+    font-size: clamp(16px, 2.2vw, 20px);
+    color: #c4dcec;
+    max-width: 60ch;
+    margin: 0 0 26px;
+  }
+
+  .links { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 34px; }
+  .btn {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    letter-spacing: 0.02em;
+    text-decoration: none;
+    padding: 11px 16px;
+    border-radius: 10px;
+    display: inline-flex; align-items: center; gap: 8px;
+    transition: transform .12s ease, background .12s ease, border-color .12s ease;
+  }
+  .btn:focus-visible { outline: 2px solid var(--frost-bright); outline-offset: 2px; }
+  .btn-primary { background: var(--frost); color: #062033; font-weight: 700; }
+  .btn-primary:hover { transform: translateY(-2px); background: var(--frost-bright); }
+  .btn-ghost { border: 1px solid var(--line); color: var(--ink); }
+  .btn-ghost:hover { transform: translateY(-2px); border-color: var(--frost); }
+
+  /* legend */
+  .legend {
+    display: flex; flex-wrap: wrap; gap: 18px 26px;
+    padding: 16px 18px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: linear-gradient(180deg, rgba(20,48,71,0.5), rgba(16,39,58,0.5));
+    margin-bottom: 40px;
+    font-size: 13px;
+  }
+  .legend h4 {
+    width: 100%; margin: 0 0 2px; font-size: 11px; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--muted); font-family: var(--font-mono); font-weight: 600;
+  }
+  .legend .row { display: flex; align-items: center; gap: 8px; color: #c4dcec; }
+  .chip {
+    font-family: var(--font-mono); font-size: 11px; font-weight: 700;
+    padding: 2px 8px; border-radius: 6px; border: 1px solid;
+    letter-spacing: 0.04em;
+  }
+  .chip.p { color: var(--good); border-color: rgba(127,214,160,0.5); background: rgba(127,214,160,0.08); }
+  .chip.m { color: var(--gold); border-color: rgba(255,207,90,0.5); background: rgba(255,207,90,0.08); }
+  .chip.g { color: var(--salmon); border-color: rgba(242,145,111,0.5); background: rgba(242,145,111,0.08); }
+  .dots { display: inline-flex; gap: 3px; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(126,194,242,0.22); }
+  .dot.on { background: var(--frost); box-shadow: 0 0 8px rgba(126,194,242,0.6); }
+
+  /* start-here */
+  .starthere {
+    border: 1px solid rgba(255,207,90,0.4);
+    background:
+      linear-gradient(180deg, rgba(255,207,90,0.10), rgba(255,207,90,0.03));
+    border-radius: 16px;
+    padding: 22px 22px 8px;
+    margin-bottom: 46px;
+  }
+  .starthere .tag {
+    font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--gold);
+  }
+  .starthere h3 { margin: 6px 0 4px; font-size: 22px; font-family: var(--font-display); font-weight: 800; letter-spacing: -0.01em; }
+  .starthere p { margin: 0 0 14px; color: #c4dcec; font-size: 15px; }
+  .trio { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; padding-bottom: 16px; }
+  .trio .card {
+    background: rgba(8,21,33,0.6); border: 1px solid var(--line); border-radius: 12px; padding: 14px;
+  }
+  .trio .n { font-family: var(--font-mono); color: var(--gold); font-size: 12px; font-weight: 700; }
+  .trio .t { font-weight: 700; margin: 4px 0 4px; font-size: 15px; }
+  .trio .d { font-size: 13px; color: var(--muted); }
+
+  /* timeline */
+  .phases { position: relative; display: flex; flex-direction: column; gap: 30px; }
+  .phases::before {
+    content: ""; position: absolute; left: 21px; top: 8px; bottom: 8px; width: 2px;
+    background: linear-gradient(180deg, var(--frost), rgba(126,194,242,0.15));
+  }
+
+  .phase { position: relative; padding-left: 62px; }
+  .node {
+    position: absolute; left: 0; top: 0;
+    width: 44px; height: 44px; border-radius: 12px;
+    display: grid; place-items: center;
+    font-family: var(--font-mono); font-weight: 800; font-size: 17px;
+    background: var(--panel-2); color: var(--frost-bright);
+    border: 1px solid var(--frost);
+    box-shadow: 0 0 0 6px var(--ground), 0 6px 18px rgba(0,0,0,0.35);
+  }
+
+  .phase-head { margin-bottom: 14px; }
+  .phase-head .k {
+    font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--muted);
+  }
+  .phase-head h2 {
+    font-family: var(--font-display); font-weight: 800; font-size: clamp(21px, 3.4vw, 27px);
+    letter-spacing: -0.015em; margin: 3px 0 4px; text-wrap: balance;
+  }
+  .phase-head .why { color: #a9c6da; font-size: 14.5px; margin: 0; max-width: 62ch; }
+
+  .feats {
+    list-style: none; margin: 0; padding: 0;
+    border: 1px solid var(--line); border-radius: 14px; overflow: hidden;
+    background: linear-gradient(180deg, rgba(18,40,58,0.55), rgba(12,28,43,0.55));
+  }
+  .feat {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: 12px 16px;
+    align-items: center;
+    padding: 13px 16px;
+    border-top: 1px solid rgba(32,72,99,0.6);
+  }
+  .feat:first-child { border-top: none; }
+  .feat .main { min-width: 0; }
+  .feat .name { font-weight: 650; font-size: 15px; }
+  .feat .name .emo { margin-right: 7px; filter: saturate(1.1); }
+  .feat .desc { color: var(--muted); font-size: 13px; margin-top: 1px; }
+  .feat .impact { display: flex; align-items: center; gap: 8px; justify-self: end; }
+  .feat .il { font-family: var(--font-mono); font-size: 10px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; }
+
+  footer {
+    margin-top: 54px; padding-top: 22px; border-top: 1px solid var(--line);
+    color: var(--muted); font-size: 13px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px;
+  }
+  footer .mono { font-family: var(--font-mono); }
+
+  @media (max-width: 620px) {
+    .trio { grid-template-columns: 1fr; }
+    .feat { grid-template-columns: 1fr auto; }
+    .feat .impact { grid-column: 1 / -1; justify-self: start; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .btn:hover { transform: none; }
+  }
+</style>
+
+<canvas id="snow" aria-hidden="true"></canvas>
+
+<div class="page">
+  <div class="wrap">
+
+    <header>
+      <span class="eyebrow">Roadmap · v0.1 → ∞</span>
+      <h1>FrostFish quer <span class="drift">crescer</span>.</h1>
+      <p class="lede">O jogo já existe e está no ar. Daqui pra frente o objetivo é um só:
+        deixá-lo <strong>mais gostoso de jogar</strong> — mais vivo, mais fundo, e com aquela
+        vontade de "só mais um upgrade". Este é o plano, em ordem de impacto.</p>
+
+      <div class="links">
+        <a class="btn btn-primary" href="https://henrykun55.github.io/frostfish/" target="_blank" rel="noopener">▶ Jogar agora</a>
+        <a class="btn btn-ghost" href="https://github.com/HenryKun55/frostfish" target="_blank" rel="noopener">‹ / › Repositório</a>
+      </div>
+
+      <div class="legend">
+        <h4>Como ler</h4>
+        <span class="row"><span class="chip p">P</span> esforço pequeno · dá pra fazer rápido</span>
+        <span class="row"><span class="chip m">M</span> esforço médio</span>
+        <span class="row"><span class="chip g">G</span> esforço grande · vale planejar</span>
+        <span class="row"><span class="dots"><i class="dot on"></i><i class="dot on"></i><i class="dot on"></i></span> impacto na diversão</span>
+      </div>
+    </header>
+
+    <section class="starthere">
+      <span class="tag">◆ Comece por aqui</span>
+      <h3>O trio de maior retorno</h3>
+      <p>Se fizer só três coisas primeiro, faça estas — é onde o jogo ganha vida e "vício" com menos trabalho.</p>
+      <div class="trio">
+        <div class="card">
+          <div class="n">01</div>
+          <div class="t">Fila viva</div>
+          <div class="d">Clientes andam, recebem o peixe e vão embora satisfeitos. A cena respira.</div>
+        </div>
+        <div class="card">
+          <div class="n">02</div>
+          <div class="t">Save + ganhos offline</div>
+          <div class="d">Volta pro jogo e o dinheiro rendeu enquanto você esteve fora. Motivo pra voltar.</div>
+        </div>
+        <div class="card">
+          <div class="n">03</div>
+          <div class="t">Primeiro ajudante</div>
+          <div class="d">Um NPC pescando com você — a mágica idle de ver a máquina rodar sozinha.</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="phases">
+
+      <section class="phase">
+        <div class="node">1</div>
+        <div class="phase-head">
+          <div class="k">Fase 1 · fundação</div>
+          <h2>Vida &amp; Suco</h2>
+          <p class="why">Fazer o mundo parecer vivo e respeitar o progresso do jogador. Barato de fazer, muda a sensação na hora.</p>
+        </div>
+        <ul class="feats">
+          <li class="feat">
+            <div class="main"><div class="name"><span class="emo">🚶</span>Fila de clientes que anda e vai embora</div>
+              <div class="desc">A galera avança, recebe a posta e sai feliz — a fila se renova sozinha.</div></div>
+            <span class="chip p">P</span>
+            <span class="impact"><span class="il">impacto</span><span class="dots"><i class="dot on"></i><i class="dot on"></i><i class="dot on"></i></span></span>
+          </li>
+          <li class="feat">
+            <div class="main"><div class="name"><span class="emo">💾</span>Salvar progresso + ganhos offline</div>
+              <div class="desc">localStorage guarda tudo; ao voltar, rendeu grana enquanto você estava fora.</div></div>
+            <span class="chip m">M</span>
+            <span class="impact"><span class="il">impacto</span><span class="dots"><i class="dot on"></i><i class="dot on"></i><i class="dot on"></i></span></span>
+          </li>
+          <li class="feat">
+            <div class="main"><div class="name"><span class="emo">✨</span>Feedback gostoso</div>
+              <div class="desc">Números pulando, tremidinha ao quebrar o gelo, brilho no upgrade, som mais rico.</div></div>
+            <span class="chip p">P</span>
+            <span class="impact"><span class="il">impacto</span><span class="dots"><i class="dot on"></i><i class="dot on"></i><i class="dot"></i></span></span>
+          </li>
+          <li class="feat">
+            <div class="main"><div class="name"><span class="emo">🖼️</span>Favicon + preview do link</div>
+              <div class="desc">Ícone e imagem bonita quando compartilhar no WhatsApp/Instagram.</div></div>
+            <span class="chip p">P</span>
+            <span class="impact"><span class="il">impacto</span><span class="dots"><i class="dot on"></i><i class="dot"></i><i class="dot"></i></span></span>
+          </li>
+        </ul>
+      </section>
+
+      <section class="phase">
+        <div class="node">2</div>
+        <div class="phase-head">
+          <div class="k">Fase 2 · o coração idle</div>
+          <h2>Ajudantes automáticos</h2>
+          <p class="why">A alma do gênero: contratar gente pra rodar a operação sozinha enquanto você expande. Ver a máquina girar é o prazer do idle.</p>
+        </div>
+        <ul class="feats">
+          <li class="feat">
+            <div class="main"><div class="name"><span class="emo">🎣</span>Pescador ajudante</div>
+              <div class="desc">NPC que quebra gelo e coleta peixe junto com você.</div></div>
+            <span class="chip m">M</span>
+            <span class="impact"><span class="il">impacto</span><span class="dots"><i class="dot on"></i><i class="dot on"></i><i class="dot on"></i></span></span>
+          </li>
+          <li class="feat">
+            <div class="main"><div class="name"><span class="emo">🔪</span>Mesa que corta sozinha</div>
+              <div class="desc">Um cortador contratado transforma peixe em carne sem você parar ali.</div></div>
+            <span class="chip m">M</span>
+            <span class="impact"><span class="il">impacto</span><span class="dots"><i class="dot on"></i><i class="dot on"></i><i class="dot on"></i></span></span>
+          </li>
+          <li class="feat">
+            <div class="main"><div class="name"><span class="emo">📦</span>Entregador &amp; coletor</div>
+              <div class="desc">NPCs que levam a carne e juntam o dinheiro do quadrado automaticamente.</div></div>
+            <span class="chip m">M</span>
+            <span class="impact"><span class="il">impacto</span><span class="dots"><i class="dot on"></i><i class="dot on"></i><i class="dot"></i></span></span>
+          </li>
+          <li class="feat">
+            <div class="main"><div class="name"><span class="emo">⬆️</span>Contratar e evoluir ajudantes</div>
+              <div class="desc">Pague pra ter mais ajudantes e deixá-los mais rápidos.</div></div>
+            <span class="chip m">M</span>
+            <span class="impact"><span class="il">impacto</span><span class="dots"><i class="dot on"></i><i class="dot on"></i><i class="dot"></i></span></span>
+          </li>
+        </ul>
+      </section>
+
+      <section class="phase">
+        <div class="node">3</div>
+        <div class="phase-head">
+          <div class="k">Fase 3 · profundidade</div>
+          <h2>Progressão que fisga</h2>
+          <p class="why">Dar sempre um próximo objetivo e picos de crescimento exponencial — o "só mais um" que não deixa largar.</p>
+        </div>
+        <ul class="feats">
+          <li class="feat">
+            <div class="main"><div class="name"><span class="emo">🔁</span>Prestígio / renascer</div>
+              <div class="desc">Zera o progresso em troca de um multiplicador permanente. Recomeça mais forte.</div></div>
+            <span class="chip m">M</span>
+            <span class="impact"><span class="il">impacto</span><span class="dots"><i class="dot on"></i><i class="dot on"></i><i class="dot on"></i></span></span>
+          </li>
+          <li class="feat">
+            <div class="main"><div class="name"><span class="emo">🐟</span>Raridades de peixe</div>
+              <div class="desc">Comum → raro → dourado, cada um valendo bem mais. Caçar o dourado vicia.</div></div>
+            <span class="chip m">M</span>
+            <span class="impact"><span class="il">impacto</span><span class="dots"><i class="dot on"></i><i class="dot on"></i><i class="dot on"></i></span></span>
+          </li>
+          <li class="feat">
+            <div class="main"><div class="name"><span class="emo">🧲</span>Novos upgrades</div>
+              <div class="desc">Ímã maior, velocidade do personagem, dano da serra, capacidade, alcance.</div></div>
+            <span class="chip p">P</span>
+            <span class="impact"><span class="il">impacto</span><span class="dots"><i class="dot on"></i><i class="dot on"></i><i class="dot"></i></span></span>
+          </li>
+          <li class="feat">
+            <div class="main"><div class="name"><span class="emo">🧊</span>Gelo-chefe</div>
+              <div class="desc">Cubos gigantes com muito HP que soltam uma recompensa gorda ao quebrar.</div></div>
+            <span class="chip p">P</span>
+            <span class="impact"><span class="il">impacto</span><span class="dots"><i class="dot on"></i><i class="dot on"></i><i class="dot"></i></span></span>
+          </li>
+        </ul>
+      </section>
+
+      <section class="phase">
+        <div class="node">4</div>
+        <div class="phase-head">
+          <div class="k">Fase 4 · a recompensa de escalar</div>
+          <h2>Um mundo que cresce</h2>
+          <p class="why">Você pediu um jogo de crescimento — então o cenário precisa crescer junto. Novos lugares são o troféu de ter escalado.</p>
+        </div>
+        <ul class="feats">
+          <li class="feat">
+            <div class="main"><div class="name"><span class="emo">🗺️</span>Novos rios / biomas</div>
+              <div class="desc">Desbloqueie áreas novas conforme cresce — cada uma com peixe e visual próprios.</div></div>
+            <span class="chip g">G</span>
+            <span class="impact"><span class="il">impacto</span><span class="dots"><i class="dot on"></i><i class="dot on"></i><i class="dot on"></i></span></span>
+          </li>
+          <li class="feat">
+            <div class="main"><div class="name"><span class="emo">🌌</span>Clima e dia/noite</div>
+              <div class="desc">Neve, aurora, luz mudando ao longo do tempo. Atmosfera viva.</div></div>
+            <span class="chip m">M</span>
+            <span class="impact"><span class="il">impacto</span><span class="dots"><i class="dot on"></i><i class="dot on"></i><i class="dot"></i></span></span>
+          </li>
+          <li class="feat">
+            <div class="main"><div class="name"><span class="emo">⚓</span>Cais maior</div>
+              <div class="desc">Docas, barcos e multidão maior conforme o negócio cresce.</div></div>
+            <span class="chip m">M</span>
+            <span class="impact"><span class="il">impacto</span><span class="dots"><i class="dot on"></i><i class="dot on"></i><i class="dot"></i></span></span>
+          </li>
+          <li class="feat">
+            <div class="main"><div class="name"><span class="emo">🪚</span>Ferramentas novas</div>
+              <div class="desc">Motosserra, furadeira, até bombinha — jeitos diferentes de rachar o gelo.</div></div>
+            <span class="chip m">M</span>
+            <span class="impact"><span class="il">impacto</span><span class="dots"><i class="dot on"></i><i class="dot on"></i><i class="dot"></i></span></span>
+          </li>
+        </ul>
+      </section>
+
+      <section class="phase">
+        <div class="node">5</div>
+        <div class="phase-head">
+          <div class="k">Fase 5 · retenção</div>
+          <h2>Metas &amp; razões pra voltar</h2>
+          <p class="why">Objetivos claros e recompensas por retornar transformam "joguei uma vez" em "jogo todo dia".</p>
+        </div>
+        <ul class="feats">
+          <li class="feat">
+            <div class="main"><div class="name"><span class="emo">🎯</span>Missões e conquistas</div>
+              <div class="desc">Metas curtas ("venda 100 peixes") com recompensa — sempre um próximo passo.</div></div>
+            <span class="chip m">M</span>
+            <span class="impact"><span class="il">impacto</span><span class="dots"><i class="dot on"></i><i class="dot on"></i><i class="dot"></i></span></span>
+          </li>
+          <li class="feat">
+            <div class="main"><div class="name"><span class="emo">🎁</span>Recompensa diária</div>
+              <div class="desc">Um bônus por voltar cada dia. Cria hábito.</div></div>
+            <span class="chip p">P</span>
+            <span class="impact"><span class="il">impacto</span><span class="dots"><i class="dot on"></i><i class="dot on"></i><i class="dot"></i></span></span>
+          </li>
+          <li class="feat">
+            <div class="main"><div class="name"><span class="emo">📊</span>Tela de estatísticas</div>
+              <div class="desc">Peixes pescados, dinheiro total, tempo jogado — o prazer de ver os números.</div></div>
+            <span class="chip p">P</span>
+            <span class="impact"><span class="il">impacto</span><span class="dots"><i class="dot on"></i><i class="dot"></i><i class="dot"></i></span></span>
+          </li>
+          <li class="feat">
+            <div class="main"><div class="name"><span class="emo">🏆</span>Placar de líderes</div>
+              <div class="desc">Ranking entre amigos (precisa de um backend simples).</div></div>
+            <span class="chip g">G</span>
+            <span class="impact"><span class="il">impacto</span><span class="dots"><i class="dot on"></i><i class="dot on"></i><i class="dot"></i></span></span>
+          </li>
+        </ul>
+      </section>
+
+      <section class="phase">
+        <div class="node">6</div>
+        <div class="phase-head">
+          <div class="k">Fase 6 · produto</div>
+          <h2>Polish &amp; plataforma</h2>
+          <p class="why">Os últimos 10% que fazem parecer um jogo de verdade, pronto pra rodar liso no celular de qualquer um.</p>
+        </div>
+        <ul class="feats">
+          <li class="feat">
+            <div class="main"><div class="name"><span class="emo">🎨</span>Passada de arte e animação</div>
+              <div class="desc">Personagens e cenário mais caprichados, mais frames de animação.</div></div>
+            <span class="chip g">G</span>
+            <span class="impact"><span class="il">impacto</span><span class="dots"><i class="dot on"></i><i class="dot on"></i><i class="dot"></i></span></span>
+          </li>
+          <li class="feat">
+            <div class="main"><div class="name"><span class="emo">📱</span>Mobile caprichado</div>
+              <div class="desc">Toque grande, vibração no upgrade, joystick mais gostoso.</div></div>
+            <span class="chip m">M</span>
+            <span class="impact"><span class="il">impacto</span><span class="dots"><i class="dot on"></i><i class="dot on"></i><i class="dot"></i></span></span>
+          </li>
+          <li class="feat">
+            <div class="main"><div class="name"><span class="emo">⬇️</span>Instalável (PWA)</div>
+              <div class="desc">Adicionar à tela inicial e jogar offline, como um app de verdade.</div></div>
+            <span class="chip m">M</span>
+            <span class="impact"><span class="il">impacto</span><span class="dots"><i class="dot on"></i><i class="dot on"></i><i class="dot"></i></span></span>
+          </li>
+          <li class="feat">
+            <div class="main"><div class="name"><span class="emo">🎵</span>Mais trilhas 16-bit</div>
+              <div class="desc">Faixas variadas pra não cansar, com opção de trocar.</div></div>
+            <span class="chip p">P</span>
+            <span class="impact"><span class="il">impacto</span><span class="dots"><i class="dot on"></i><i class="dot"></i><i class="dot"></i></span></span>
+          </li>
+        </ul>
+      </section>
+
+    </div>
+
+    <footer>
+      <span>FrostFish · roadmap vivo — a ordem pode mudar conforme a gente joga e sente.</span>
+      <span class="mono">🎣 do print do Instagram → jogo no ar</span>
+    </footer>
+
+  </div>
+</div>
+
+<script>
+  // Subtle drifting snow — ambient, low density, respects reduced motion.
+  (function () {
+    const canvas = document.getElementById('snow');
+    const ctx = canvas.getContext('2d');
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let w, h, flakes;
+
+    function reset() {
+      w = canvas.width = window.innerWidth;
+      h = canvas.height = window.innerHeight;
+      const count = Math.min(90, Math.floor(w * h / 26000));
+      flakes = Array.from({ length: count }, () => ({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        r: 0.8 + Math.random() * 2.2,
+        s: 0.25 + Math.random() * 0.7,
+        d: Math.random() * Math.PI * 2,
+      }));
+    }
+    reset();
+    window.addEventListener('resize', reset);
+
+    function draw() {
+      ctx.clearRect(0, 0, w, h);
+      for (const f of flakes) {
+        ctx.beginPath();
+        ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(180,230,255,' + (0.15 + f.r * 0.12) + ')';
+        ctx.fill();
+        f.y += f.s;
+        f.x += Math.sin(f.d) * 0.3;
+        f.d += 0.01;
+        if (f.y > h + 4) { f.y = -4; f.x = Math.random() * w; }
+      }
+      requestAnimationFrame(draw);
+    }
+
+    if (reduce) {
+      // Draw one static frame only.
+      for (const f of flakes) {
+        ctx.beginPath();
+        ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(180,230,255,' + (0.15 + f.r * 0.12) + ')';
+        ctx.fill();
+      }
+    } else {
+      draw();
+    }
+  })();
+</script>
+</body>
+</html>
