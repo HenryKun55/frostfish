@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#bfe6ff" />
+  <title>FrostFish</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <canvas id="game"></canvas>
+
+  <!-- HUD overlay (grows in later milestones) -->
+  <div id="hud">
+    <div class="hud-item" id="hud-money">$ 0</div>
+    <div class="hud-item" id="hud-fish">🐟 0</div>
+    <div class="hud-item" id="hud-meat">🥩 0</div>
+    <button id="mute" class="hud-item" aria-label="Som">🔊</button>
+  </div>
+
+  <!-- On-screen hint -->
+  <div id="hint">WASD / setas pra andar &nbsp;·&nbsp; no celular, arraste</div>
+
+  <!-- Live camera-angle readout (appears when you press the tuning keys) -->
+  <div id="debug"></div>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
